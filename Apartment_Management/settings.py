@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apartment'
+    'apartment',
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = 'apartment.User'
