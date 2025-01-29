@@ -5,7 +5,6 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 
 from apartment import serializers
-from .models import *
 from .serializers import *
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -20,17 +19,17 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], url_path='current-user', detail=False)
     def get_current_user(self, request):
-        return Response(serializers.UserSerializer(request.user).data)
+        return Response(UserSerializer(request.user).data)
 
 class ChangePasswordView(viewsets.ViewSet):
     serializer_class = ChangePasswordSerializer
-    permission_classes = (permissions.IsAuthenticated())
+    permission_classes = (permissions.IsAuthenticated,)
 
-    def get_serializer(self, data):
-        return ChangePasswordSerializer(data=data)
+    # def get_serializer(self, data):
+    #     return ChangePasswordSerializer(data=data)
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        serializer = ChangePasswordSerializer(request.data)
         if serializer.is_valid():
             user = request.user
             if not user.check_password(serializer.data.get("old_password")):
@@ -58,7 +57,7 @@ class LoginView(viewsets.ViewSet):
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = (permissions.IsAuthenticated())
+    permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -66,7 +65,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
 class VehicleViewSet(viewsets.ModelViewSet):
     queryset = Vehicle.objects.all()
     serializer_class = VehicleSerializer
-    permission_classes = (permissions.IsAuthenticated())
+    permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -74,7 +73,7 @@ class VehicleViewSet(viewsets.ModelViewSet):
 class LockerItemViewSet(viewsets.ModelViewSet):
     queryset = LockerItem.objects.all()
     serializer_class = LockerItemSerializer
-    permission_classes = (permissions.IsAuthenticated())
+    permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -82,7 +81,7 @@ class LockerItemViewSet(viewsets.ModelViewSet):
 class FeedbackViewSet(viewsets.ModelViewSet):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
-    permission_classes = (permissions.IsAuthenticated())
+    permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -90,7 +89,7 @@ class FeedbackViewSet(viewsets.ModelViewSet):
 class SurveyViewSet(viewsets.ModelViewSet):
     queryset = Survey.objects.all()
     serializer_class = SurveySerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly()]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)

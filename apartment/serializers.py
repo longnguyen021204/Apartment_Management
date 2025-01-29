@@ -30,30 +30,31 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 # PAYMENTS #
 class PaymentSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Payment
-        fields = ['amount','payment_type', 'payment_date', 'user']
+        fields = ['user','amount','payment_type', 'payment_date']
+        # fields = '__all__'
         extra_kwargs = {'user': {'read_only': True}}
 
 
 # VEHICLES #
 class VehicleSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Vehicle
-        fields = ['vehicle_type', 'brand', 'model']
+        fields = ['user','vehicle_type', 'brand', 'model']
 
 # LockerItem #
 class LockerItemSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = LockerItem
-        fields = ['item_name', 'locker_number', 'received_date', 'status']
+        fields = ['user','locker_number','item_name', 'received_date', 'status']
 
 # FEEDBACK #
 class FeedbackSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Feedback
         fields = '__all__'
