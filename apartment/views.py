@@ -1,21 +1,18 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, pagination, parsers, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-
 from apartment import serializers
 from .serializers import *
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet,
+                  generics.CreateAPIView,
+                  generics.RetrieveAPIView,):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    def get_permissions(self):
-        if self.action in ['get_current_user']:
-            return [permissions.IsAuthenticated()]
-
-        return [permissions.AllowAny()]
+    permission_classes = [permissions.AllowAny,]
+    parser_classes = [parsers.MultiPartParser]
 
     @action(methods=['get'], url_path='current-user', detail=False)
     def get_current_user(self, request):
@@ -24,9 +21,6 @@ class UserViewSet(viewsets.ModelViewSet):
 class ChangePasswordView(viewsets.ViewSet):
     serializer_class = ChangePasswordSerializer
     permission_classes = (permissions.IsAuthenticated,)
-
-    # def get_serializer(self, data):
-    #     return ChangePasswordSerializer(data=data)
 
     def create(self, request, *args, **kwargs):
         serializer = ChangePasswordSerializer(request.data)
@@ -38,8 +32,6 @@ class ChangePasswordView(viewsets.ViewSet):
             user.save()
             return Response({'message': 'Password updated successfully.'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 class LoginView(viewsets.ViewSet):
