@@ -3,7 +3,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-from apartment import serializers
 from .serializers import *
 
 class UserViewSet(viewsets.ModelViewSet,
@@ -11,7 +10,7 @@ class UserViewSet(viewsets.ModelViewSet,
                   generics.RetrieveAPIView,):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [permissions.AllowAny,]
+    permission_classes = (permissions.AllowAny,)
     parser_classes = [parsers.MultiPartParser]
 
     @action(methods=['get'], url_path='current-user', detail=False)
@@ -35,7 +34,7 @@ class ChangePasswordView(viewsets.ViewSet):
 
 
 class LoginView(viewsets.ViewSet):
-    permission_classes = (permissions.AllowAny())
+    permission_classes = (permissions.AllowAny,)
 
     def create(self, request):
         username = request.data.get('username')

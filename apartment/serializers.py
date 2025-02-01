@@ -34,7 +34,6 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = ['user','amount','payment_type', 'payment_date']
-        # fields = '__all__'
         extra_kwargs = {'user': {'read_only': True}}
 
 

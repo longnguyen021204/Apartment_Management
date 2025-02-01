@@ -2,7 +2,7 @@ from rest_framework import routers
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from apartment import views
+from apartment import views, admin
 
 router = DefaultRouter()
 router.register('users', views.UserViewSet)
