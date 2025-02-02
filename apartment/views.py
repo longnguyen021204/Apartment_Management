@@ -10,8 +10,14 @@ class UserViewSet(viewsets.ModelViewSet,
                   generics.RetrieveAPIView,):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (permissions.AllowAny,)
     parser_classes = [parsers.MultiPartParser]
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return [permissions.IsAuthenticated()]
+
+        return [permissions.AllowAny()]
+
 
     @action(methods=['get'], url_path='current-user', detail=False)
     def get_current_user(self, request):
@@ -44,6 +50,8 @@ class LoginView(viewsets.ViewSet):
             token, _ = Token.objects.get_or_create(user=user)
             return Response({'token': token.key})
         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
 
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()

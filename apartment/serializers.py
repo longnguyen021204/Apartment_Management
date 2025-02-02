@@ -43,6 +43,7 @@ class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Vehicle
         fields = ['user','vehicle_type', 'brand', 'model']
+        extra_kwargs = {'user': {'read_only': True}}
 
 # LockerItem #
 class LockerItemSerializer(serializers.ModelSerializer):
@@ -50,6 +51,7 @@ class LockerItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = LockerItem
         fields = ['user','locker_number','item_name', 'received_date', 'status']
+        extra_kwargs = {'user': {'read_only': True}}
 
 # FEEDBACK #
 class FeedbackSerializer(serializers.ModelSerializer):
