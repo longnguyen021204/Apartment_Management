@@ -11,12 +11,13 @@ class UserViewSet(viewsets.ModelViewSet,
     queryset = User.objects.all()
     serializer_class = UserSerializer
     parser_classes = [parsers.MultiPartParser]
+    permission_classes = [permissions.IsAuthenticated]
 
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return [permissions.IsAuthenticated()]
-
-        return [permissions.AllowAny()]
+    # def get_permissions(self):
+    #     if self.action == 'retrieve':
+    #         return [permissions.IsAuthenticated()]
+    #
+    #     return [permissions.AllowAny()]
 
 
     @action(methods=['get'], url_path='current-user', detail=False)

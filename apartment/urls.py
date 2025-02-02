@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from apartment import views, admin
 
 router = DefaultRouter()
-router.register('users', views.UserViewSet)
+router.register(r'users', views.UserViewSet)
 router.register(r'payments', views.PaymentViewSet)
 router.register(r'vehicles', views.VehicleViewSet)
 router.register(r'locker_items', views.LockerItemViewSet)
