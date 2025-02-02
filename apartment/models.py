@@ -2,7 +2,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from rest_framework import status
 
+
+class Room(models.Model):
+    id_room = models.AutoField(primary_key=True)
+    user = models.OneToOneField('User', null=True, on_delete=models.PROTECT, blank=True,
+                                      related_name='phong')
+
+    def __str__(self):
+        return self.id_room
 
 class User(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
@@ -24,10 +33,11 @@ class Payment(models.Model):
     payment_image = models.ImageField(upload_to='payment_images/', null=True,
                                       blank=True)
     description = models.TextField(null=True, blank=True)
-    is_paid = models.BooleanField(default=False)
+    status = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Payment {self.id} by {self.user}"
+        if status:
+            return f"Payment {self.id} by {self.user}"
 
 
 class Vehicle(models.Model):
@@ -48,7 +58,7 @@ class LockerItem(models.Model):
     received_date = models.DateTimeField(auto_now_add=True)
     pickup_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=50, default="Chờ nhận")  # Ví dụ: "Chờ nhận", "Đã nhận"
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='locker_items', null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='locker_items', null=True,
                              blank=True)
 
     def __str__(self):

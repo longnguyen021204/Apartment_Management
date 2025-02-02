@@ -37,6 +37,7 @@ class PaymentSerializer(serializers.ModelSerializer):
         extra_kwargs = {'user': {'read_only': True}}
 
 
+
 # VEHICLES #
 class VehicleSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)

@@ -7,7 +7,6 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 
-
 admin.site.register(User)
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(Vehicle)
