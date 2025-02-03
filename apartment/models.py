@@ -1,4 +1,4 @@
-
+from django.contrib.auth import user_logged_in
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
@@ -6,12 +6,12 @@ from rest_framework import status
 
 
 class Room(models.Model):
-    id_room = models.AutoField(primary_key=True)
+    id_room = models.AutoField(primary_key=True, unique=True, editable=False)
     user = models.OneToOneField('User', null=True, on_delete=models.PROTECT, blank=True,
                                       related_name='phong')
 
     def __str__(self):
-        return self.id_room
+        return f"{self.id_room} of {self.user.last_name}"
 
 class User(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)
