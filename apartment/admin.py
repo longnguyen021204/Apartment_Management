@@ -13,6 +13,7 @@ class AdminUserAdmin(admin.ModelAdmin):
 
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ['user','amount', 'payment_type', 'payment_method','payment_date','description']
+    list_filter = ['amount', 'payment_date', 'status']
 
 class VehicleAdmin(admin.ModelAdmin):
     list_display = ['user','vehicle_type']

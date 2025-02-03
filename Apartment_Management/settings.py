@@ -144,3 +144,6 @@ MEDIA_ROOT = '%s/apartment/static/' % BASE_DIR
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLIENT_ID = "g9wiBU3sEAtYgnJ5QUcCbPqcB6btmcKKcLpDaBUA"
+CLIENT_SECRET = "0OCT4DYVzsVewYTPXKRdqahzZ15O34rOwxpb7XJcJeBVeWhON9nCI0dsE6L8c3bTlA4BJbpXyx9oE9rjHORCn4RkpIeoa2V3YrP4WKW8JDSKYHSb6sOerIMKg8pjFHgT"
