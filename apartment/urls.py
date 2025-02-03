@@ -15,5 +15,5 @@ router.register(r'answers', views.AnswerViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('vnp_return', views.vnpay_return, name="vnpay_return"),
+    path('vnp_return/', views.vnpay_return, name="vnpay_return"),
 ]

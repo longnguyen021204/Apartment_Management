@@ -82,10 +82,10 @@ def vnpay_return(request):
         vnp_CardType = inputData['vnp_CardType']
         if vnp.validate_response(settings.VNP_HASHSECRET):
             if vnp_ResponseCode == "00":
-                phieu = PhieuDongTien.objects.get(id=order_id)
-                # Cập nhật trạng thái phiếu đóng tiền thành approved
-                phieu.status = PhieuStatus.APPROVED.value  # Cập nhật trạng thái là approved
-                phieu.save()  # Lưu thay đổi vào cơ sở dữ liệu
+                p = Payment.objects.get(id=order_id)
+                # Cập nhật trạng thái phiếu đóng tiền thành true
+                p.status = True  # Cập nhật trạng thái là true
+                p.save()  # Lưu thay đổi vào cơ sở dữ liệu
                 return JsonResponse({
                 "message": "Thanh toán thành công!",
                 "data": {
