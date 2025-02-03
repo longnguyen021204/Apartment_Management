@@ -146,4 +146,11 @@ MEDIA_ROOT = '%s/apartment/static/' % BASE_DIR
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CLIENT_ID = "g9wiBU3sEAtYgnJ5QUcCbPqcB6btmcKKcLpDaBUA"
-CLIENT_SECRET = "0OCT4DYVzsVewYTPXKRdqahzZ15O34rOwxpb7XJcJeBVeWhON9nCI0dsE6L8c3bTlA4BJbpXyx9oE9rjHORCn4RkpIeoa2V3YrP4WKW8JDSKYHSb6sOerIMKg8pjFHgT"
+CLIENT_SECRET = ("0OCT4DYVzsVewYTPXKRdqahzZ15O34rOwxpb7XJcJeBVeWhON9nCI0dsE6"
+     "L8c3bTlA4BJbpXyx9oE9rjHORCn4RkpIeoa2V3YrP4WKW8JDSKYHSb6sOerIMKg8pjFHgT")
+
+VNPAY_RETURN_URL = 'http://localhost:8000/payment_return'  # get from config
+VNPAY_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'  # get from config
+VNPAY_API_URL = 'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction'
+VNPAY_TMN_CODE = 'J4UHTPI5'  # Website ID in VNPAY System, get from config
+VNPAY_HASHSECRET = 'EYSUR908NTCJ6SA48GWZBRNNZASK56YB'  # Secret key for create checksum,get from config

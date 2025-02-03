@@ -8,10 +8,10 @@ from rest_framework import status
 class Room(models.Model):
     id_room = models.AutoField(primary_key=True, unique=True, editable=False)
     user = models.OneToOneField('User', null=True, on_delete=models.PROTECT, blank=True,
-                                      related_name='phong')
+                                      related_name='room')
 
     def __str__(self):
-        return f"{self.id_room} of {self.user.last_name}"
+        return f"{self.id_room}"
 
 class User(AbstractUser):
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True)

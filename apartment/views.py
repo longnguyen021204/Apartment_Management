@@ -1,9 +1,13 @@
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, permissions, status, pagination, parsers, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .serializers import *
+from .vnpay import vnpay
+
 
 class UserViewSet(viewsets.ModelViewSet,
                   generics.CreateAPIView,
@@ -61,10 +65,37 @@ class PaymentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    # def create(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save(user=self.request.user)
+@csrf_exempt
+def vnpay_return(request):
+    inputData = request.GET
+    if inputData:
+        vnp = vnpay()
+        vnp.responseData = inputData.dict()
+        order_id = inputData['vnp_TxnRef']
+        amount = int(inputData['vnp_Amount']) / 100
+        order_desc = inputData['vnp_OrderInfo']
+        vnp_TransactionNo = inputData['vnp_TransactionNo']
+        vnp_ResponseCode = inputData['vnp_ResponseCode']
+        vnp_TmnCode = inputData['vnp_TmnCode']
+        vnp_PayDate = inputData['vnp_PayDate']
+        vnp_BankCode = inputData['vnp_BankCode']
+        vnp_CardType = inputData['vnp_CardType']
+        if vnp.validate_response(settings.VNP_HASHSECRET):
+            if vnp_ResponseCode == "00":
+                phieu = PhieuDongTien.objects.get(id=order_id)
+                # Cập nhật trạng thái phiếu đóng tiền thành approved
+                phieu.status = PhieuStatus.APPROVED.value  # Cập nhật trạng thái là approved
+                phieu.save()  # Lưu thay đổi vào cơ sở dữ liệu
+                return JsonResponse({
+                "message": "Thanh toán thành công!",
+                "data": {
+                    "amount": amount,
+                    "order_id": order_id,
+                }
+            })
+            else:
+                return JsonResponse({"message": "Thanh toán thất bại, vui lòng thử lại.","error_code": vnp_ResponseCode}, status=400)
+
 
 
 class VehicleViewSet(viewsets.ModelViewSet):
