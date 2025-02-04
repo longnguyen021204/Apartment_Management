@@ -96,6 +96,13 @@ class LockerItemSerializer(serializers.ModelSerializer):
         fields = ['user','locker_number','item_name', 'received_date', 'status']
         extra_kwargs = {'user': {'read_only': True}}
 
+class ItemSerializer(serializers.ModelSerializer):
+    locker = LockerItemSerializer(read_only=True)
+    class Meta:
+        model = Item
+        fields = '__all__'
+
+
 # FEEDBACK #
 class FeedbackSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)

@@ -7,7 +7,7 @@ from rest_framework import status
 
 class Room(models.Model):
     id_room = models.AutoField(primary_key=True, unique=True, editable=False)
-    user = models.OneToOneField('User', null=True, on_delete=models.PROTECT, blank=True,
+    user = models.OneToOneField('User', null=True, on_delete=models.SET_NULL, blank=True,
                                       related_name='room')
 
     def __str__(self):
@@ -38,7 +38,6 @@ class Payment(models.Model):
         if status:
             return f"Payment {self.id} by {self.user}"
 
-
 class Vehicle(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='vehicles')
     license_plate = models.CharField(max_length=20)
@@ -47,23 +46,22 @@ class Vehicle(models.Model):
     model = models.CharField(max_length=50, null=True, blank=True)  # Ví dụ: "Vios", "SH"
 
     def __str__(self):
-        return self.license_plate
+        return self.vehicle_type
 
 
 class LockerItem(models.Model):
-    locker_number = models.CharField(max_length=20)  # Số tủ
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='locker', null=True,
-                             blank=True)
+    id_locker = models.AutoField(primary_key=True, unique=True, editable=False,)
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, related_name='locker_user', null=True, blank=True)
     def __str__(self):
-        return self.locker_number
+        return f"{self.id_locker}"
 
 class Item(models.Model):
     item_name = models.CharField(max_length=255)
-    recipient_name = models.CharField(max_length=255)
     received_date = models.DateTimeField(auto_now_add=True)
     pickup_date = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=50, default="Chờ nhận")
-    locker_number = models.ForeignKey(LockerItem, on_delete=models.PROTECT, related_name='items', null=True,)
+    locker_id = models.ForeignKey(LockerItem, on_delete=models.CASCADE, related_name='items', null=True,
+                                      blank=True)
 
     def __str__(self):
         return self.item_name
