@@ -1,4 +1,5 @@
 from datetime import datetime
+from urllib import request
 
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
@@ -26,6 +27,8 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
+
+
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
@@ -37,11 +40,12 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 # PAYMENTS #
 class PaymentSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(read_only=True)
+    # user = UserSerializer(read_only=True)
     class Meta:
         model = Payment
-        fields = ['user','amount','payment_type', 'payment_date']
-        extra_kwargs = {'user': {'read_only': True}}
+        fields = ['user_id','amount','payment_type', 'payment_date','status']
+        extra_kwargs = {'user_id': {'read_only': True}}
 
 class PaymentDetailSerializer(PaymentSerializer):
     payment_details = PaymentSerializer(many=True, read_only=True)
@@ -51,10 +55,9 @@ class PaymentDetailSerializer(PaymentSerializer):
     def get_vnpay_url(self, obj):
         from apartment.vnpay import vnpay  # Import class VNPay đã cấu hình
         vnPay = vnpay()
-
         order_type = 'other'
         order_id = str(obj.id)
-        amount = sum([ct.phi_dong for ct in obj.payment_details.all()])
+        amount = sum([details.amount for details in obj.payment_details.all()])
         order_desc = f"{order_id}"
         ipaddr = self.context.get('request').META.get('REMOTE_ADDR')
         if not ipaddr:

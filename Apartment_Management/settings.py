@@ -45,8 +45,6 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'apartment.User'
 
-import pymysql
-pymysql.install_as_MySQLdb()
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -91,6 +89,8 @@ WSGI_APPLICATION = 'Apartment_Management.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+import pymysql
+pymysql.install_as_MySQLdb()
 
 DATABASES = {
     'default': {
@@ -100,7 +100,6 @@ DATABASES = {
         'PASSWORD': 'admin123'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

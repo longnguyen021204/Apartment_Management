@@ -1,3 +1,5 @@
+from urllib import request
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, permissions, status, pagination, parsers, generics
@@ -7,6 +9,8 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from .serializers import *
 from .vnpay import vnpay
+from apartment.models import *
+from apartment import perm
 
 
 class UserViewSet(viewsets.ModelViewSet,
@@ -15,15 +19,9 @@ class UserViewSet(viewsets.ModelViewSet,
     queryset = User.objects.all()
     serializer_class = UserSerializer
     parser_classes = [parsers.MultiPartParser]
+    permission_classes = [permissions.IsAuthenticated]
 
-    def get_permissions(self):
-        if self.action == 'retrieve':
-            return [permissions.IsAuthenticated()]
-
-        return [permissions.AllowAny()]
-
-
-    @action(methods=['get'], url_path='current-user', detail=False)
+    @action(methods=['get'], url_path='current-user', detail=False, permission_classes=[permissions.IsAuthenticated])
     def get_current_user(self, request):
         return Response(UserSerializer(request.user).data)
 
@@ -42,25 +40,11 @@ class ChangePasswordView(viewsets.ViewSet):
             return Response({'message': 'Password updated successfully.'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# class LoginView(viewsets.ViewSet):
-#     permission_classes = (permissions.AllowAny,)
-#
-#     def create(self, request):
-#         username = request.data.get('username')
-#         password = request.data.get('password')
-#         user = authenticate(request, username=username, password=password)
-#         if user is not None:
-#             token, _ = Token.objects.get_or_create(user=user)
-#             return Response({'token': token.key})
-#         return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
-
-class PaymentViewSet(viewsets.ModelViewSet):
+class PaymentViewSet(viewsets.ModelViewSet,
+                     generics.RetrieveAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
