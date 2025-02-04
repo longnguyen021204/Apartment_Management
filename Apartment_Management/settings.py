@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-w6_0*2#))f)+s&(d6%owsr6tak18c@27fgwfk)bkp0m2yj9pnq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['longnguyen212.pythonanywhere.com']
 
 
 # Application definition
@@ -95,9 +95,10 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'apartment_db',
-        'USER': 'root',
-        'PASSWORD': 'admin123'
+        'NAME': 'longnguyen212$apartment_db',
+        'USER': 'longnguyen212',
+        'PASSWORD': '@admin123',
+        'HOST': 'longnguyen212.mysql.pythonanywhere-services.com'
     }
 }
 
@@ -134,8 +135,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
-
+import os
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 MEDIA_ROOT = '%s/apartment/static/' % BASE_DIR
 
@@ -144,12 +146,11 @@ MEDIA_ROOT = '%s/apartment/static/' % BASE_DIR
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CLIENT_ID = "JdcRFeZFUqC0i5nYzcUqFxEMEJ9RUHcEFAkLjev6"
-CLIENT_SECRET = ("ARvYHNiiOeZOIuxQxn964c0aO6Q8GEYcCfv812tb6yt5xHG0S1R4o"
-                 "CZprJoTHuacIOtCoW5zpFRuxWnHDjULBcSsHBS2on110yCpOltI06pnqdZuyOJwCXiG87y48CTk")
+CLIENT_ID = "EKrvdRdBajTllWhlg2258WEQZFCP0eWkmrX4VmLF"
+CLIENT_SECRET = "dwNvbL6NdISuIN7co9SMTlkd2DX0qMzW5LkJNwDkoAy4bliihw2JzcjeRvD8foT1RdyR09SnPmHJpQbpWwjPBVwok4v3KdRAVhTN2E96mZsBl8WLOuUqafpM6uMu1gcK"
 
-VNPAY_RETURN_URL = 'http://localhost:8000/payment_return'
-VNPAY_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'
+VNPAY_RETURN_URL = 'http://localhost:8000/payment_return'  # get from config
+VNPAY_URL = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html'  # get from config
 VNPAY_API_URL = 'https://sandbox.vnpayment.vn/merchant_webapi/api/transaction'
-VNPAY_TMN_CODE = 'J4UHTPI5'
-VNPAY_HASHSECRET = 'EYSUR908NTCJ6SA48GWZBRNNZASK56YB'
+VNPAY_TMN_CODE = 'J4UHTPI5'  # Website ID in VNPAY System, get from config
+VNPAY_HASHSECRET = 'EYSUR908NTCJ6SA48GWZBRNNZASK56YB'  # Secret key for create checksum,get from config
