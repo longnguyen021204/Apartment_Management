@@ -41,10 +41,17 @@ INSTALLED_APPS = [
     'apartment',
     'rest_framework',
     'oauth2_provider',
+    'cloudinary',
 ]
 
 AUTH_USER_MODEL = 'apartment.User'
 
+import cloudinary
+cloudinary.config(
+    cloud_name = "don2xj6lw",
+    api_key = "562859567766692",
+    api_secret = "w837tCSqnhkpO3PWPw0B65uC-zE",
+)
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
