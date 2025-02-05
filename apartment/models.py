@@ -68,7 +68,7 @@ class Item(models.Model):
         return self.item_name
 
 class Feedback(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='feedbacks')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedbacks')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -95,7 +95,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='answers_given')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='answers_given')
     text = models.TextField()
 
     def __str__(self):

@@ -14,7 +14,6 @@ from apartment import perm
 
 
 class UserViewSet(viewsets.ModelViewSet,
-                  generics.ListAPIView,
                   generics.CreateAPIView,
                   generics.RetrieveAPIView,):
     queryset = User.objects.all()
@@ -22,7 +21,7 @@ class UserViewSet(viewsets.ModelViewSet,
     parser_classes = [parsers.MultiPartParser]
 
     def get_permissions(self):
-        if self.action == 'retrieve':
+        if self.action == 'retrieve' or self.request.method == 'GET':
             return [permissions.IsAuthenticated()]
 
         return [permissions.AllowAny()]
