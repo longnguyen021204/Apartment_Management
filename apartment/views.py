@@ -14,16 +14,28 @@ from apartment import perm
 
 
 class UserViewSet(viewsets.ModelViewSet,
+                  generics.ListAPIView,
                   generics.CreateAPIView,
                   generics.RetrieveAPIView,):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     parser_classes = [parsers.MultiPartParser]
-    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action == 'retrieve':
+            return [permissions.IsAuthenticated()]
+
+        return [permissions.AllowAny()]
+
 
     @action(methods=['get'], url_path='current-user', detail=False, permission_classes=[permissions.IsAuthenticated])
     def get_current_user(self, request):
         return Response(UserSerializer(request.user).data)
+
+    @action(methods=['get'], detail=True, permission_classes=[permissions.IsAuthenticated])
+    def get_vehicle(self, request, pk):
+        vehicles = self.get_object().vehicle_set.all()
+        return Response(VehicleSerializer(vehicles, many=True).data)
 
 class ChangePasswordView(viewsets.ViewSet):
     serializer_class = ChangePasswordSerializer
@@ -90,13 +102,18 @@ class VehicleViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-class LockerItemViewSet(viewsets.ModelViewSet):
+class LockerItemViewSet(viewsets.ModelViewSet, generics.ListAPIView):
     queryset = LockerItem.objects.all()
     serializer_class = LockerItemSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+    @action(methods=['get'], url_path='items', detail=True)
+    def get_items(self, request, pk):
+        items = self.get_object().item_set.all()
+        return Response(ItemSerializer(items, many=True).data)
 
 class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()

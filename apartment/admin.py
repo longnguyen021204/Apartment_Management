@@ -29,8 +29,8 @@ class LockerAdmin(admin.ModelAdmin):
     list_filter = ['id_locker', 'user']
 
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ['locker_id','item_name', 'received_date', 'status', ]
-    list_filter = ['locker_id','received_date', 'status']
+    list_display = ['lockeritem_id','item_name', 'received_date', 'status', ]
+    list_filter = ['lockeritem_id','received_date', 'status']
 
 
 admin.site = MyAdminSite(name="Apartment Management")
